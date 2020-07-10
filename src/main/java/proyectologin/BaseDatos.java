@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BaseDatos {
@@ -62,7 +63,34 @@ public class BaseDatos {
 	
 	public List<Usuario> obtenerListaUsuarios ()
 	{
-		return null;
+		List<Usuario> lu = null;
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet resultSet = null;
+		Usuario usuario_aux = null;
+		
+			try {
+				lu = new ArrayList<Usuario>();
+				connection = this.obtenerConexion();
+				statement = connection.createStatement();
+				resultSet = statement.executeQuery(InstruccionesSelect.SELECCIONAR_TODOS_USUARIOS);
+				while (resultSet.next())
+				{
+					//crear el usuario
+					usuario_aux = new Usuario(resultSet);
+					//add a la lista
+					lu.add(usuario_aux);
+				}
+				
+			}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}finally {
+				this.liberarRecursos(connection, statement, resultSet);
+				
+			}
+		
+		return lu;
 	}
 	
 	public boolean insertarUsuario (Usuario u)

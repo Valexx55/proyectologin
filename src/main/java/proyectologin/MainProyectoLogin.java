@@ -128,10 +128,14 @@ public class MainProyectoLogin {
 			opcion = leerOpcion();
 			// 3 casos: hacemos los caminos para cada elección del usuario
 			switch (opcion) {
-			case 1:
+			case 1://MOSTRAR
 				
 				//TODO haced el listado de los usuarios haciendo uso del método obtenerListaUsuarios
-				//baseDatos.obtenerListaUsuarios();
+				   List<Usuario> lu = baseDatos.obtenerListaUsuarios();
+				   for (Usuario u : lu)
+				   {
+					   System.out.println(u);
+				   }
 				 break;
 
 			case 2://LOGIN
@@ -152,10 +156,10 @@ public class MainProyectoLogin {
 				
 				
 				break;
-			case 3:
+			case 3://insertar
 				
 				break;
-			case 4:
+			case 4://borrar usuario por id
 				
 
 				break;
