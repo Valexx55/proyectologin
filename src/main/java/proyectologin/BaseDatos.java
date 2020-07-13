@@ -20,9 +20,19 @@ public class BaseDatos {
 		//esta sección es como para iniciaizar la clase y se puede usar
 		//cuando se necesite. las instrucciones que metamos aquí en la sección
 		//static se ejecutan automáticamente cuando aparece por primera vez
-		//el nombre en el codigo
+		//el nombre de la clase en el codigo
 		System.out.println("estamos en la sección static");
 	
+		try {
+			DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void registrarDriver ()
+	{
 		try {
 			DriverManager.registerDriver(new com.mysql.jdbc.Driver());
 		} catch (SQLException e) {
@@ -60,6 +70,18 @@ public class BaseDatos {
 	}
 	
 
+	public void liberarRecursos (Connection connection, Statement statement)
+	{
+		try {
+			
+			statement.close();
+			connection.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+	
 	
 	public List<Usuario> obtenerListaUsuarios ()
 	{
@@ -73,7 +95,7 @@ public class BaseDatos {
 				lu = new ArrayList<Usuario>();
 				connection = this.obtenerConexion();
 				statement = connection.createStatement();
-				resultSet = statement.executeQuery(InstruccionesSelect.SELECCIONAR_TODOS_USUARIOS);
+				resultSet = statement.executeQuery(InstruccionesSQL.SELECCIONAR_TODOS_USUARIOS);
 				while (resultSet.next())
 				{
 					//crear el usuario
@@ -93,9 +115,35 @@ public class BaseDatos {
 		return lu;
 	}
 	
-	public boolean insertarUsuario (Usuario u)
+	public boolean insertarUsuario (Usuario u) 
 	{
-		return false;
+		boolean insertado = false;
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		
+			try {
+				connection = this.obtenerConexion();
+				preparedStatement = connection.prepareStatement(InstruccionesSQL.INSERTAR_USUARIOS);
+				preparedStatement.setString(1, u.getNombre());
+				preparedStatement.setString(2, u.getPwd());
+				int nfilas = preparedStatement.executeUpdate();//siempre executeUpdate para INSERTAR; DELETE; o UPDATE
+				System.out.println("NFILAS afectadas = " + nfilas);
+//				if (nfilas!=0)
+//				{
+//					insertado = true;
+//				}
+				insertado = (nfilas!=0);
+				
+			}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+				
+			}finally {
+				liberarRecursos(connection, preparedStatement);
+				
+			}
+		
+		return insertado;
 	}
 	
 	public boolean borrarUsuario (int id)
@@ -122,7 +170,7 @@ public class BaseDatos {
 			//1 pillo conexión
 		try {
 			connection = this.obtenerConexion();
-			ps = connection.prepareStatement(InstruccionesSelect.LOGIN_USUARIOS);
+			ps = connection.prepareStatement(InstruccionesSQL.LOGIN_USUARIOS);
 			ps.setString(1,  nombre);
 			ps.setString(2,  pwd);
 			rs = ps.executeQuery();

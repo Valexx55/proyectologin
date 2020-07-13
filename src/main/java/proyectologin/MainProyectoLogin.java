@@ -118,6 +118,7 @@ public class MainProyectoLogin {
 		int opcion;
 	
 		BaseDatos baseDatos = new BaseDatos();
+		//baseDatos.registrarDriver();
 		
 		
 		do {
@@ -157,6 +158,17 @@ public class MainProyectoLogin {
 				
 				break;
 			case 3://insertar
+				//pedimos un usuario
+				String nombre_nuevo = pedirNombre();
+				String pwd_nuevo = pedirPwd();
+				Usuario usuario_nuevo = new Usuario(nombre_nuevo, pwd_nuevo);
+				boolean resultado_insercion = baseDatos.insertarUsuario(usuario_nuevo);
+				if (resultado_insercion)
+				{
+					System.out.println("Usuario insertado con éxito");
+				} else {
+					System.out.println("No se puedo insertar el Usuario");
+				}
 				
 				break;
 			case 4://borrar usuario por id
@@ -174,7 +186,7 @@ public class MainProyectoLogin {
 				break;
 			}
 
-		} while (opcion != 7);
+		} while (opcion != 5);
 		
 		
 
