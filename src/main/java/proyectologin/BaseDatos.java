@@ -82,9 +82,43 @@ public class BaseDatos {
 		}
 	}
 	
+	/**
+	 * método que busca lo usuarios cuyo nombre empiece por la cadena recibida
+	 * 
+	 * @param nombrebuscado el inicio del patrón de búsqueda
+	 * @return una lista vacía si no se recuperan resultados o la lista con los usuarios coincidentes
+	 */
 	public List<Usuario> buscarUsuariosPorNombre (String nombrebuscado)
 	{
-		return null;
+		List<Usuario> lu = null;
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet resultSet = null;
+		Usuario usuario_aux = null;
+		
+			try {
+				lu = new ArrayList<Usuario>();
+				connection = this.obtenerConexion();
+				ps = connection.prepareStatement(InstruccionesSQL.BUSCAR_USUARIO_POR_NOMBRE);
+				ps.setString(1, "%"+nombrebuscado+"%");
+				resultSet = ps.executeQuery();
+				while (resultSet.next())
+				{
+					//crear el usuario
+					usuario_aux = new Usuario(resultSet);
+					//add a la lista
+					lu.add(usuario_aux);
+				}
+				
+			}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}finally {
+				this.liberarRecursos(connection, ps, resultSet);
+				
+			}
+		
+		return lu;
 	}
 	
 	
@@ -153,7 +187,34 @@ public class BaseDatos {
 	
 	public boolean borrarUsuario (int id)
 	{
-		return false;
+
+		boolean borrado = false;
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		
+			try {
+				connection = this.obtenerConexion();
+				preparedStatement = connection.prepareStatement(InstruccionesSQL.BORRAR_USUARIO_POR_ID);
+				preparedStatement.setInt(1, id);
+				int nfilas = preparedStatement.executeUpdate();//siempre executeUpdate para INSERTAR; DELETE; o UPDATE
+				System.out.println("NFILAS afectadas = " + nfilas);
+//				if (nfilas!=0)
+//				{
+//					insertado = true;
+//				}
+				borrado = (nfilas!=0);
+				
+			}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+				
+			}finally {
+				liberarRecursos(connection, preparedStatement);
+				
+			}
+		
+		return borrado;
+	
 	}
 	
 	/**

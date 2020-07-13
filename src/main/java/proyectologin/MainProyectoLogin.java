@@ -84,6 +84,19 @@ public class MainProyectoLogin {
 		return pwd;
 	}
 	
+	public static int pedirIdUsuario ()
+	{
+		int id = 0;
+		Scanner scaner = null;
+		
+			
+			System.out.println("Introduce id a borrar:");
+			scaner = new Scanner(System.in);
+			id= scaner.nextInt();
+			
+		return id;
+	}
+	
 	
 	private static void mostrarMenu() {
 
@@ -174,11 +187,32 @@ public class MainProyectoLogin {
 				break;
 			case 4://borrar usuario por id
 				
+				int id = pedirIdUsuario();
+				if (baseDatos.borrarUsuario(id))
+				{
+					System.out.println("Usuario borrado con éxito");
+				} else {
+					System.out.println("No se puedo borrar el Usuario");
+			
+				}
 
 				break;
 			case 5://BUSCAR POR NOMBRE
 				
-
+				String nombre_buscado = pedirNombre();
+				//EN MUCHOS BUSCADORES SE PASA A MINÚSCULAS O SE QUITAN TILDES---> SE NORMALIZA ANTES DE BUSCAR
+				List<Usuario> lub = baseDatos.buscarUsuariosPorNombre(nombre_buscado);
+				if (lub.size()==0)
+				{
+				System.out.println("No usuarios que empiecen por " + nombre_buscado);
+				} else {
+					for (Usuario u : lub)
+					{
+						System.out.println(u);
+					}
+					
+				}
+				
 				break;
 
 			case 6:
