@@ -91,7 +91,8 @@ public class MainProyectoLogin {
 		System.out.println("2. LOGIN USUARIO");
 		System.out.println("3. INSERTAR UN USUARIO NUEVO");
 		System.out.println("4. BORRAR UN USUARIO POR SU ID");
-		System.out.println("5. SALIR.");
+		System.out.println("5. BÚSQUEDA POR NOMBRE");
+		System.out.println("6. SALIR.");
 		System.out.println("");// para que nos deje un salto en blanco
 		System.out.println("Introduzca opción: ");
 		
@@ -175,18 +176,22 @@ public class MainProyectoLogin {
 				
 
 				break;
-			case 5:
+			case 5://BUSCAR POR NOMBRE
+				
+
+				break;
+
+			case 6:
 				
 				System.out.println("Quiere salir");
 
 				break;
-
 			default:
 				System.out.println("Opción no disponible");
 				break;
 			}
 
-		} while (opcion != 5);
+		} while (opcion != 6);
 		
 		
 

@@ -82,6 +82,11 @@ public class BaseDatos {
 		}
 	}
 	
+	public List<Usuario> buscarUsuariosPorNombre (String nombrebuscado)
+	{
+		return null;
+	}
+	
 	
 	public List<Usuario> obtenerListaUsuarios ()
 	{
